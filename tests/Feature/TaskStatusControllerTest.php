@@ -100,5 +100,4 @@ class TaskStatusControllerTest extends TestCase
             'name' => 'test'
         ]);
     }
-
 }
