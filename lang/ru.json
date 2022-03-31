@@ -1,0 +1,19 @@
+{
+    "Confirm password": "Подтвердить пароль",
+    "Please confirm your password before continuing.": "Прежде чем продолжить, пожалуйста, подтвердите свой пароль",
+    "Password": "Пароль",
+    "Forgot Your Password?": "Забыли пароль?",
+    "Reset Password": "Сброс пароля",
+    "Email Address": "Email",
+    "Send Password Reset Link": "Отправить ссылку для сброса пароля",
+    "Login": "Вход",
+    "Remember Me": "Запомнить меня",
+    "Register": "Зарегистрировать",
+    "Verify Your Email Address": "Подтвердите свой адрес электронной почты",
+    "A fresh verification link has been sent to your email address.": "На ваш адрес электронной почты отправлена новая ссылка для подтверждения.",
+    "If you did not receive the email": "Если вы не получили письмо",
+    "click here to request another": "нажмите здесь, чтобы получить другое",
+    "Name": "Имя",
+    "Confirm Password": "Подтвердить",
+    "Logout": "Выход"
+}
