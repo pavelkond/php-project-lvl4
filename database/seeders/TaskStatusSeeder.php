@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 
 class TaskStatusSeeder extends Seeder
 {
-    const DEFAULT_STATUSES = [
+    private const DEFAULT_STATUSES = [
         "Новый",
         "В работе",
         "На тестировании",
