@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 
@@ -99,9 +100,16 @@ class TaskStatusController extends Controller
     {
         $this->authorize('delete', $taskStatus);
 
-        $taskStatus->delete();
+        $taskWithStatusCount = Task::query()
+            ->where('status_id', $taskStatus->getKey())
+            ->count();
+        if ($taskWithStatusCount === 0) {
+            $taskStatus->delete();
+            return redirect()
+                ->route('task_statuses.index');
+        }
 
-        return redirect()
-            ->route('task_statuses.index');
+        flash('Не удалось удалить статус')->error();
+        return back();
     }
 }
