@@ -3,7 +3,7 @@
 @section('content')
     <h1>Изменение статуса</h1>
 
-    {{ Form::model($taskStatus, ['route' => ['task_statuses.update', $taskStatus], 'method' => 'put']) }}
+    {{ Form::model($taskStatus, ['route' => ['task_statuses.update', $taskStatus], 'method' => 'patch']) }}
         {{ Form::label('name', 'Имя') }}
         {{ Form::text('name') }}
         {{ Form::submit('Обновить') }}
