@@ -19,8 +19,9 @@ class TaskStatusControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->taskStatus = new TaskStatus();
-        $this->taskStatus->fill(['name' => 'test']);
+        $this->taskStatus = TaskStatus::factory()->make([
+            'name' => 'test'
+        ]);
         $this->taskStatus->save();
         $this->user = User::factory()->create();
     }
