@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helper;
 use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
@@ -18,9 +21,17 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = QueryBuilder::for(Task::class)
+            ->allowedFilters([
+                AllowedFilter::exact('status_id'),
+                AllowedFilter::exact('created_by_id'),
+                AllowedFilter::exact('assigned_to_id')
+            ])->get();
+
+        $statuses = Helper::getMappedValues(TaskStatus::class);
+        $users = Helper::getMappedValues(User::class);
         return response()
-            ->view('task.index', compact('tasks'));
+            ->view('task.index', compact('tasks', 'statuses', 'users'));
     }
 
     /**
@@ -32,23 +43,11 @@ class TaskController extends Controller
     {
         $this->authorize('create', Task::class);
 
-        $statusSelect = TaskStatus::query()
-            ->select('id', 'name')
-            ->get()
-            ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
-            ->all();
-        $assignerSelect = User::query()
-            ->select('id', 'name')
-            ->get()
-            ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
-            ->all();
-        $labelSelect = Label::query()
-            ->select('id', 'name')
-            ->get()
-            ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
-            ->all();
+        $statuses = Helper::getMappedValues(TaskStatus::class);
+        $users = Helper::getMappedValues(User::class);
+        $labels = Helper::getMappedValues(Label::class);
         return response()
-            ->view('task.create', compact('statusSelect', 'assignerSelect', 'labelSelect'));
+            ->view('task.create', compact('statuses', 'users', 'labels'));
     }
 
     /**
@@ -103,23 +102,11 @@ class TaskController extends Controller
     {
         $this->authorize('update', $task);
 
-        $statusSelect = TaskStatus::query()
-            ->select('id', 'name')
-            ->get()
-            ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
-            ->all();
-        $assignerSelect = User::query()
-            ->select('id', 'name')
-            ->get()
-            ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
-            ->all();
-        $labelSelect = Label::query()
-            ->select('id', 'name')
-            ->get()
-            ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
-            ->all();
+        $statuses = Helper::getMappedValues(TaskStatus::class);
+        $users = Helper::getMappedValues(User::class);
+        $labels = Helper::getMappedValues(Label::class);
         return response()
-            ->view('task.edit', compact('task', 'statusSelect', 'assignerSelect', 'labelSelect'));
+            ->view('task.edit', compact('task', 'statuses', 'users', 'labels'));
     }
 
     /**
