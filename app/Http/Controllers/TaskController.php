@@ -75,6 +75,7 @@ class TaskController extends Controller
             $task->labels()->sync($data['labels']);
         }
 
+        flash('Задача успешно создана')->success();
         return redirect()
             ->route('tasks.index');
     }
@@ -134,6 +135,7 @@ class TaskController extends Controller
             $task->labels()->sync($data['labels']);
         }
 
+        flash('Задача успешно изменена')->success();
         return redirect()
             ->route('tasks.index');
     }
@@ -150,6 +152,7 @@ class TaskController extends Controller
 
         $task->delete();
 
+        flash('Задача успешно удалена')->success();
         return redirect()
             ->route('tasks.index');
     }

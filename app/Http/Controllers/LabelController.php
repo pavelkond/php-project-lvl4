@@ -50,6 +50,7 @@ class LabelController extends Controller
         $label->fill($data);
         $label->save();
 
+        flash('Метка успешно создана')->success();
         return redirect()
             ->route('labels.index');
     }
@@ -86,6 +87,7 @@ class LabelController extends Controller
         $label->fill($data);
         $label->save();
 
+        flash('Метка успешно изменена')->success();
         return redirect()
             ->route('labels.index');
     }
@@ -103,6 +105,7 @@ class LabelController extends Controller
         $taskWithLabelCount = $label->tasks()->count();
         if ($taskWithLabelCount === 0) {
             $label->delete();
+            flash('Метка успешно удалена')->success();
             return redirect()
                 ->route('labels.index');
         }
