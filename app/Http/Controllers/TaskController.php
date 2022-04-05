@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
@@ -41,14 +42,19 @@ class TaskController extends Controller
             ->get()
             ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
             ->all();
+        $labelSelect = Label::query()
+            ->select('id', 'name')
+            ->get()
+            ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
+            ->all();
         return response()
-            ->view('task.create', compact('statusSelect', 'assignerSelect'));
+            ->view('task.create', compact('statusSelect', 'assignerSelect', 'labelSelect'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -59,12 +65,15 @@ class TaskController extends Controller
             'name' => 'required',
             'description' => 'nullable',
             'status_id' => 'required|exists:task_statuses,id',
-            'assigned_to_id' => 'nullable|exists:users,id'
+            'assigned_to_id' => 'nullable|exists:users,id',
+            'labels' => 'nullable|array'
         ]);
         $task = new Task();
         $task->fill($data);
         $task->createdBy()->associate(Auth::user());
         $task->save();
+        $labelsIds = $data['labels'] ?? [];
+        $task->labels()->sync($labelsIds);
 
         return redirect()
             ->route('tasks.index');
@@ -73,7 +82,7 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Task  $task
+     * @param \App\Models\Task $task
      * @return \Illuminate\Http\Response
      */
     public function show(Task $task)
@@ -87,7 +96,7 @@ class TaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Task  $task
+     * @param \App\Models\Task $task
      * @return \Illuminate\Http\Response
      */
     public function edit(Task $task)
@@ -104,15 +113,20 @@ class TaskController extends Controller
             ->get()
             ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
             ->all();
+        $labelSelect = Label::query()
+            ->select('id', 'name')
+            ->get()
+            ->mapWithKeys(fn($item, $key) => [$item['id'] => $item['name']])
+            ->all();
         return response()
-            ->view('task.edit', compact('task', 'statusSelect', 'assignerSelect'));
+            ->view('task.edit', compact('task', 'statusSelect', 'assignerSelect', 'labelSelect'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Task  $task
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Task $task
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Task $task)
@@ -123,10 +137,13 @@ class TaskController extends Controller
             'name' => 'required',
             'description' => 'nullable',
             'status_id' => 'required|exists:task_statuses,id',
-            'assigned_to_id' => 'nullable|exists:users,id'
+            'assigned_to_id' => 'nullable|exists:users,id',
+            'labels' => 'nullable|array'
         ]);
         $task->fill($data);
         $task->save();
+        $labelsIds = $data['labels'] ?? [];
+        $task->labels()->sync($labelsIds);
 
         return redirect()
             ->route('tasks.index');
@@ -135,7 +152,7 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Task  $task
+     * @param \App\Models\Task $task
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Task $task)

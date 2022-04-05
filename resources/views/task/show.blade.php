@@ -9,7 +9,9 @@
         <p>Описание: {{ $task->description }}</p>
         <p>Метки:</p>
         <ul>
-
+            @foreach($task->labels as $label)
+                <li>{{ $label->name }}</li>
+            @endforeach
         </ul>
     </div>
 @endsection

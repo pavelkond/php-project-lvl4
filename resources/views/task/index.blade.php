@@ -22,25 +22,27 @@
             @endif
         </tr>
         @foreach($tasks as $task)
-            <td>{{ $task->id }}</td>
-            <td>{{ $task->status->name }}</td>
-            <td><a href="{{ route('tasks.show', $task) }}">{{ $task->name }}</a></td>
-            <td>{{ $task->createdBy->name }}</td>
-            <td>{{ $task->assignedTo->name ?? ''}}</td>
-            <td>{{ $task->created_at }}</td>
-            @if(Auth::check())
-                <td>
-                    {{ Form::open(['route' => ['tasks.edit', $task], 'method' => 'get']) }}
-                        {{ Form::submit('Изменить') }}
-                    {{ Form::close() }}
-
-                    @can('delete', $task)
-                        {{ Form::open(['route' => ['tasks.destroy', $task], 'method' => 'delete']) }}
-                            {{ Form::submit('Удалить') }}
+            <tr>
+                <td>{{ $task->id }}</td>
+                <td>{{ $task->status->name }}</td>
+                <td><a href="{{ route('tasks.show', $task) }}">{{ $task->name }}</a></td>
+                <td>{{ $task->createdBy->name }}</td>
+                <td>{{ $task->assignedTo->name ?? ''}}</td>
+                <td>{{ $task->created_at }}</td>
+                @if(Auth::check())
+                    <td>
+                        {{ Form::open(['route' => ['tasks.edit', $task], 'method' => 'get']) }}
+                            {{ Form::submit('Изменить') }}
                         {{ Form::close() }}
-                    @endcan
-                </td>
-            @endif
+
+                        @can('delete', $task)
+                            {{ Form::open(['route' => ['tasks.destroy', $task], 'method' => 'delete']) }}
+                                {{ Form::submit('Удалить') }}
+                            {{ Form::close() }}
+                        @endcan
+                    </td>
+                @endif
+            </tr>
         @endforeach
     </table>
 @endsection

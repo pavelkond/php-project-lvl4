@@ -6,3 +6,5 @@
 {{ Form::select('status_id', $statusSelect, null, ['placeholder' => '----------']) }} <br>
 {{ Form::label('assigned_to_id', '') }}
 {{ Form::select('assigned_to_id', $assignerSelect, null, ['placeholder' => '----------']) }} <br>
+{{ Form::label('labels[]', 'Метки') }}
+{{ Form::select('labels[]', $labelSelect, null, ['placeholder' => '----------', 'multiple' => 'multiple']) }} <br>
