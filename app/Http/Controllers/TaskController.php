@@ -71,8 +71,9 @@ class TaskController extends Controller
         $task->fill($data);
         $task->createdBy()->associate(Auth::user());
         $task->save();
-        $labelsIds = $data['labels'] ?? [];
-        $task->labels()->sync($labelsIds);
+        if (!is_null($data['labels'][0])) {
+            $task->labels()->sync($data['labels']);
+        }
 
         return redirect()
             ->route('tasks.index');
@@ -129,8 +130,9 @@ class TaskController extends Controller
         ]);
         $task->fill($data);
         $task->save();
-        $labelsIds = $data['labels'] ?? [];
-        $task->labels()->sync($labelsIds);
+        if (!is_null($data['labels'][0])) {
+            $task->labels()->sync($data['labels']);
+        }
 
         return redirect()
             ->route('tasks.index');
