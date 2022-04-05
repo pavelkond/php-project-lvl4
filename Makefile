@@ -27,3 +27,9 @@ lint:
 
 lint-fix:
 	composer exec --verbose phpcbf -- --standard=PSR12 app database routes tests
+
+release:
+	cp -n .env.example .env || true
+	php artisan key:gen --ansi
+	php artisan migrate
+
