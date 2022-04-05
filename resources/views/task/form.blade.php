@@ -36,7 +36,7 @@
 </div>
 <div class="form-group mb-3">
     {{ Form::label('labels[]', 'Метки') }}
-    {{ Form::select('labels[]', $labels, null, ['placeholder' => '----------', 'multiple' => 'multiple', 'class' => 'form-control']) }}
+    {{ Form::select('labels[]', $labels, null, ['placeholder' => '----------', 'multiple' => 'multiple', 'class' => 'form-control', 'required' => 'required']) }}
     @error('labels')
     <span class="text-danger" role="alert">
             <strong>{{ $message }}</strong>
