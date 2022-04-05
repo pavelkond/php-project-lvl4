@@ -26,6 +26,8 @@ class LabelController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Label::class);
+
         return response()
             ->view('label.create');
     }
@@ -38,6 +40,8 @@ class LabelController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Label::class);
+
         $data = $this->validate($request, [
             'name' => 'required|unique:labels,name',
             'description' => 'nullable'
@@ -58,6 +62,8 @@ class LabelController extends Controller
      */
     public function edit(Label $label)
     {
+        $this->authorize('update', $label);
+
         return response()
             ->view('label.edit', compact('label'));
     }
@@ -71,6 +77,8 @@ class LabelController extends Controller
      */
     public function update(Request $request, Label $label)
     {
+        $this->authorize('update', $label);
+
         $data = $this->validate($request, [
             'name' => 'required|unique:labels,name',
             'description' => 'nullable'
@@ -90,6 +98,8 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
+        $this->authorize('delete', $label);
+
         $taskWithLabelCount = $label->tasks()->count();
         if ($taskWithLabelCount === 0) {
             $label->delete();
