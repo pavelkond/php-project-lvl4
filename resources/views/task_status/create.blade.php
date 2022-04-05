@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Создать статус</h1>
+    <h1 class="mb-5">Создать статус</h1>
 
-    {{ Form::open(['route' => 'task_statuses.store', 'method' => 'post']) }}
-        {{ Form::label('name', 'Имя') }}
-        {{ Form::text('name') }}
-        {{ Form::submit('Создать') }}
+    {{ Form::open(['route' => 'task_statuses.store', 'method' => 'post', 'class' => 'w-50']) }}
+        <div class="form-group mb-3">
+            {{ Form::label('name', 'Имя') }}
+            {{ Form::text('name', null, ['class' => 'form-control']) }}
+        </div>
+        {{ Form::submit('Создать', ['class' => 'btn btn-primary mt-3']) }}
     {{ Form::close() }}
 @endsection

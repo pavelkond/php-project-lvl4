@@ -1,22 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Задачи</h1>
+    <h1 class="mb-5">Задачи</h1>
 
-    {{ Form::open(['route' => 'tasks.index', 'method' => 'get']) }}
-        {{ Form::select('filter[status_id]', $statuses, null, ['placeholder' => 'Статус']) }}
-        {{ Form::select('filter[created_by_id]', $users, null, ['placeholder' => 'Автор']) }}
-        {{ Form::select('filter[assigned_to_id]', $users, null, ['placeholder' => 'Исполнитель']) }}
-        {{ Form::submit('Применить') }}
-    {{ Form::close() }}
+    <div class="d-flex mb-3">
+        <div>
+            {{ Form::open(['route' => 'tasks.index', 'method' => 'get']) }}
+            <div class="row g-1">
+                <div class="col">
+                    {{ Form::select('filter[status_id]', $statuses, null, ['placeholder' => 'Статус', 'class' => 'form-select me-2']) }}
+                </div>
+                <div class="col">
+                    {{ Form::select('filter[created_by_id]', $users, null, ['placeholder' => 'Автор', 'class' => 'form-select me-2']) }}
+                </div>
+                <div class="col">
+                    {{ Form::select('filter[assigned_to_id]', $users, null, ['placeholder' => 'Исполнитель', 'class' => 'form-select me-2']) }}
+                </div>
+                <div class="col">
+                    {{ Form::submit('Применить', ['class' => 'btn btn-outline-primary me-2']) }}
+                </div>
+            </div>
+            {{ Form::close() }}
+        </div>
+        <div class="ms-auto">
+            @if(Auth::check())
+                {{ Form::open(['route' => 'tasks.create', 'method' => 'get']) }}
+                {{ Form::submit('Создать задачу', ['class' => 'btn btn-primary ml-auto']) }}
+                {{ Form::close() }}
+            @endif
+        </div>
+    </div>
 
-    @if(Auth::check())
-        {{ Form::open(['route' => 'tasks.create', 'method' => 'get']) }}
-            {{ Form::submit('Создать задачу') }}
-        {{ Form::close() }}
-    @endif
-
-    <table>
+    <table class="table me-2">
         <tr>
             <th>ID</th>
             <th>Статус</th>
@@ -38,15 +53,21 @@
                 <td>{{ $task->created_at }}</td>
                 @if(Auth::check())
                     <td>
-                        {{ Form::open(['route' => ['tasks.edit', $task], 'method' => 'get']) }}
-                            {{ Form::submit('Изменить') }}
-                        {{ Form::close() }}
+                        <div class="row g-1">
+                            @can('delete', $task)
+                                <div class="col">
+                                    {{ Form::open(['route' => ['tasks.destroy', $task], 'method' => 'delete']) }}
+                                    {{ Form::submit('Удалить', ['class' => 'btn btn-danger']) }}
+                                    {{ Form::close() }}
+                                </div>
+                            @endcan
 
-                        @can('delete', $task)
-                            {{ Form::open(['route' => ['tasks.destroy', $task], 'method' => 'delete']) }}
-                                {{ Form::submit('Удалить') }}
-                            {{ Form::close() }}
-                        @endcan
+                            <div class="col">
+                                {{ Form::open(['route' => ['tasks.edit', $task], 'method' => 'get']) }}
+                                    {{ Form::submit('Изменить', ['class' => 'btn btn-primary']) }}
+                                {{ Form::close() }}
+                            </div>
+                        </div>
                     </td>
                 @endif
             </tr>
