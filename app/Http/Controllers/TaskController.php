@@ -150,6 +150,7 @@ class TaskController extends Controller
     {
         $this->authorize('delete', $task);
 
+        $task->labels()->detach();
         $task->delete();
 
         flash('Задача успешно удалена')->success();
