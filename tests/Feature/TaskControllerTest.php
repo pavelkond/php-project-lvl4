@@ -45,7 +45,8 @@ class TaskControllerTest extends TestCase
     {
         $data = [
             'name' => 'test2',
-            'status_id' => $this->task->status->id
+            'status_id' => $this->task->status->id,
+            'labels' => [null]
         ];
         $this->post(route('tasks.store'), $data)
             ->assertStatus(403);
@@ -89,7 +90,8 @@ class TaskControllerTest extends TestCase
     {
         $data = [
             'name' => 'test2',
-            'status_id' => $this->task->status->id
+            'status_id' => $this->task->status->id,
+            'labels' => [null]
         ];
         $this->patch(route('tasks.update', $this->task), $data)
             ->assertStatus(403);
