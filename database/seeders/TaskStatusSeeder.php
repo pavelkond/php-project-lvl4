@@ -22,11 +22,7 @@ class TaskStatusSeeder extends Seeder
     public function run()
     {
         foreach (self::DEFAULT_STATUSES as $taskStatus) {
-            $status = new TaskStatus();
-            $status->fill([
-                'name' => $taskStatus
-            ]);
-            $status->save();
+            TaskStatus::factory()->create(['name' => $taskStatus]);
         }
     }
 }
