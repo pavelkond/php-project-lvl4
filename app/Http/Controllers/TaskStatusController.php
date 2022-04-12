@@ -3,18 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskStatusRequest;
-use App\Models\Task;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 
 class TaskStatusController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth')
-            ->except('index');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -35,6 +28,8 @@ class TaskStatusController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', TaskStatus::class);
+
         return response()
             ->view('task_status.create');
     }
@@ -47,6 +42,8 @@ class TaskStatusController extends Controller
      */
     public function store(TaskStatusRequest $request)
     {
+        $this->authorize('create', TaskStatus::class);
+
         $status = new TaskStatus();
         $status->fill($request->validated());
         $status->save();
@@ -64,6 +61,8 @@ class TaskStatusController extends Controller
      */
     public function edit(TaskStatus $taskStatus)
     {
+        $this->authorize('update', $taskStatus);
+
         return response()
             ->view('task_status.edit', compact('taskStatus'));
     }
@@ -77,6 +76,8 @@ class TaskStatusController extends Controller
      */
     public function update(TaskStatusRequest $request, TaskStatus $taskStatus)
     {
+        $this->authorize('update', $taskStatus);
+
         $taskStatus->fill($request->validated());
         $taskStatus->save();
 
@@ -93,6 +94,8 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
+        $this->authorize('delete', $taskStatus);
+
         if ($taskStatus->getRelatedTasksCount() === 0) {
             $taskStatus->delete();
             flash('Статус успешно удален')->success();
