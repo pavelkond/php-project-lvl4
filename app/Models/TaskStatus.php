@@ -19,7 +19,7 @@ class TaskStatus extends Model
     public function getRelatedTasksCount(): int
     {
         return self::query()
-            ->join('tasks', 'tasks.status_id', '=', 'task_status.id')
+            ->join('tasks', 'tasks.status_id', '=', 'task_statuses.id')
             ->count();
     }
 }
