@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskStatusRequest;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
@@ -41,16 +42,13 @@ class TaskStatusController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TaskStatusRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(TaskStatusRequest $request)
     {
-        $data = $this->validate($request, [
-            'name' => 'required|unique:task_statuses'
-        ]);
         $status = new TaskStatus();
-        $status->fill($data);
+        $status->fill($request->validated());
         $status->save();
 
         flash('Статус успешно создан')->success();
@@ -73,16 +71,13 @@ class TaskStatusController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TaskStatusRequest  $request
      * @param  \App\Models\TaskStatus  $taskStatus
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, TaskStatus $taskStatus)
+    public function update(TaskStatusRequest $request, TaskStatus $taskStatus)
     {
-        $data = $this->validate($request, [
-            'name' => 'required|unique:task_statuses'
-        ]);
-        $taskStatus->fill($data);
+        $taskStatus->fill($request->validated());
         $taskStatus->save();
 
         flash('Статус успешно изменен')->success();
