@@ -15,4 +15,11 @@ class TaskStatus extends Model
     {
         $this->hasMany(Task::class, 'status_id');
     }
+
+    public function getRelatedTasksCount(): int
+    {
+        return self::query()
+            ->join('tasks', 'tasks.status_id', '=', 'task_status.id')
+            ->count();
+    }
 }

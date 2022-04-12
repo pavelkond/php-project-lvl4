@@ -93,10 +93,7 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-        $taskWithStatusCount = Task::query()
-            ->where('status_id', $taskStatus->getKey())
-            ->count();
-        if ($taskWithStatusCount === 0) {
+        if ($taskStatus->getRelatedTasksCount() === 0) {
             $taskStatus->delete();
             flash('Статус успешно удален')->success();
             return redirect()
