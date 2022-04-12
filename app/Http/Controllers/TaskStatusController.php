@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class TaskStatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')
+            ->except('index');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,8 +34,6 @@ class TaskStatusController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', TaskStatus::class);
-
         return response()
             ->view('task_status.create');
     }
@@ -42,8 +46,6 @@ class TaskStatusController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', TaskStatus::class);
-
         $data = $this->validate($request, [
             'name' => 'required|unique:task_statuses'
         ]);
@@ -64,8 +66,6 @@ class TaskStatusController extends Controller
      */
     public function edit(TaskStatus $taskStatus)
     {
-        $this->authorize('update', $taskStatus);
-
         return response()
             ->view('task_status.edit', compact('taskStatus'));
     }
@@ -79,8 +79,6 @@ class TaskStatusController extends Controller
      */
     public function update(Request $request, TaskStatus $taskStatus)
     {
-        $this->authorize('update', $taskStatus);
-
         $data = $this->validate($request, [
             'name' => 'required|unique:task_statuses'
         ]);
@@ -100,8 +98,6 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-        $this->authorize('delete', $taskStatus);
-
         $taskWithStatusCount = Task::query()
             ->where('status_id', $taskStatus->getKey())
             ->count();
